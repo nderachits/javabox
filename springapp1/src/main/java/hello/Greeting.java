@@ -1,5 +1,7 @@
 package hello;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * User: nike
  * Date: 11/16/13
