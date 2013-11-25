@@ -1,11 +1,16 @@
 package hello;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.test.web.ModelAndViewAssert;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -17,6 +22,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class GreetingControllerStandaloneTest {
 
+    public static final int GREETING_ID = 123;
+    public static final String GREETING_CONTENT = "Some content";
     private MockMvc mockMvc;
     @Before
     public void setUp() throws Exception {
@@ -29,11 +36,42 @@ public class GreetingControllerStandaloneTest {
     }
 
     @Test
-    public void testGreetingForm() throws Exception {
+    public void testGreeting() throws Exception {
         mockMvc.perform(get("/greeting"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("name", "World"));
+
+    }
+
+    @Test
+    public void testGreetingForm() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(get("/greetingform"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("greeting"))
+                .andExpect(view().name("greetingform"))
+                .andReturn();
+        Greeting greeting = ModelAndViewAssert.assertAndReturnModelAttributeOfType(
+                        mvcResult.getModelAndView(), "greeting", Greeting.class);
+        assertNotNull(greeting);
+
+    }
+
+    @Test
+    public void testGreetingFormSubmit() throws Exception {
+
+        MvcResult mvcResult = mockMvc.perform(post("/greetingform")
+                                    .param("id", ""+GREETING_ID)
+                                    .param("content", GREETING_CONTENT))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(view().name("result"))
+                .andReturn();
+        Greeting greetingResult = ModelAndViewAssert.assertAndReturnModelAttributeOfType(
+                mvcResult.getModelAndView(), "greeting", Greeting.class);
+        assertNotNull(greetingResult);
+        assertEquals(GREETING_ID, greetingResult.getId());
+        assertEquals(GREETING_CONTENT, greetingResult.getContent());
 
     }
 }
