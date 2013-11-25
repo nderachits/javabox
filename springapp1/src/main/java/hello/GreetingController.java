@@ -28,8 +28,11 @@ public class GreetingController {
     }
 
     @RequestMapping(value = "/greetingform", method = RequestMethod.POST)
-    public String greetingSubmit(@ModelAttribute Greeting greeting, Model model ) {
+    public String greetingSubmit(@Valid @ModelAttribute Greeting greeting, BindingResult bindingResult, Model model ) {
         model.addAttribute("greeting", greeting);
+        if(bindingResult.hasErrors()) {
+            return "greetingform";
+        }
         return "result";
     }
 

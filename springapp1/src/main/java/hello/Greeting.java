@@ -1,6 +1,7 @@
 package hello;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * User: nike
@@ -9,6 +10,9 @@ import javax.validation.constraints.NotNull;
 public class Greeting {
 
     private long id;
+
+    @NotNull
+    @Size(min=1)
     private String content;
 
     public long getId() {

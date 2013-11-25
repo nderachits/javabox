@@ -74,4 +74,35 @@ public class GreetingControllerStandaloneTest {
         assertEquals(GREETING_CONTENT, greetingResult.getContent());
 
     }
+
+    @Test
+    public void validationErrorOnGreetingFormSubmit() throws Exception {
+
+        mockMvc.perform(post("/greetingform")
+                                    .param("id", ""+GREETING_ID)
+                                    .param("content", ""))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(model().attributeHasErrors("greeting"))
+                .andExpect(view().name("greetingform"));
+
+    }
+
+    @Test
+    public void shouldPassValidation() throws Exception {
+        mockMvc.perform(post("/person").param("age", "21"))
+                .andExpect(status().isOk())
+                .andExpect(flash().attributeCount(0))
+                .andExpect(view().name("personresults"));
+
+    }
+
+    @Test
+    public void shouldRejectPerson() throws Exception {
+        mockMvc.perform(post("/person").param("age", "16"))
+                .andExpect(status().isMovedTemporarily())
+                .andExpect(flash().attribute("error", "must be greater than or equal to 18"))
+                .andExpect(redirectedUrl("/person"));
+
+    }
 }
