@@ -4,7 +4,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 /**
  * User: nike
@@ -18,6 +17,6 @@ public class SimpleTest {
     public void testNothing() throws Exception {
 
         assertTrue(app.doNothing());
-        fail();
+
     }
 }
