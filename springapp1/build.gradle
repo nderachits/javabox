@@ -45,7 +45,7 @@ task jenkinsTest{
     inputs.files test.outputs.files
     doLast{
         def timestamp = System.currentTimeMillis()
-        test.testResultsDir.eachFile { it.lastModified = timestamp }
+        test.reports.junitXml.destination.eachFile { it.lastModified = timestamp }
     }
 }
 build.dependsOn(jenkinsTest)
