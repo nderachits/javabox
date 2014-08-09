@@ -40,6 +40,16 @@ dependencies {
 }
 
 
+
+task jenkinsTest{
+    inputs.files test.outputs.files
+    doLast{
+        def timestamp = System.currentTimeMillis()
+        test.testResultsDir.eachFile { it.lastModified = timestamp }
+    }
+}
+build.dependsOn(jenkinsTest)
+
 task wrapper(type: Wrapper) {
     gradleVersion = '1.8'
 }
