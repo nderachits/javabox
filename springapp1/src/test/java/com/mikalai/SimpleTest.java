@@ -17,6 +17,6 @@ public class SimpleTest {
     public void testNothing() throws Exception {
 
         assertTrue(app.doNothing());
-
+        assertTrue(true);
     }
 }
