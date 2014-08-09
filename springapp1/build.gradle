@@ -39,8 +39,6 @@ dependencies {
     testCompile "junit:junit:4.11"
 }
 
-
-
 task jenkinsTest{
     inputs.files test.outputs.files
     doLast{
